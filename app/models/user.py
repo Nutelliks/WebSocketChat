@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, DateTime, func
 
-from ..core.db.base import Base
+from .base import Base
 
 
 class User(Base):
@@ -16,20 +16,20 @@ class User(Base):
     )
 
     username: Mapped[str] = mapped_column(
-        String, 
+        String(50), 
         unique=True, 
         nullable=False
     )
 
     email: Mapped[str] = mapped_column(
-        String, 
+        String(255), 
         unique=True, 
         index=True,
         nullable=False
     )
 
     hashed_password: Mapped[str] = mapped_column(
-        String, 
+        String(255), 
         nullable=False
     )
 
@@ -39,6 +39,6 @@ class User(Base):
         server_default=func.now()
     )
 
-    rooms: Mapped[list["Room"]] = relationship(
-        back_populates="creator"
+    created_rooms: Mapped[list["Room"]] = relationship(
+        back_populates="created_by"
     )
