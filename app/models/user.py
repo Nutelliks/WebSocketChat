@@ -11,34 +11,32 @@ class User(Base):
     __tablename__ = "users"
 
     id: Mapped[UUID] = mapped_column(
-        primary_key=True, 
-        default=uuid4, 
+        primary_key=True,
+        default=uuid4,
     )
 
     username: Mapped[str] = mapped_column(
-        String(50), 
-        unique=True, 
-        nullable=False
+        String(32), unique=True, index=True, nullable=False
     )
 
     email: Mapped[str] = mapped_column(
-        String(255), 
-        unique=True, 
-        index=True,
-        nullable=False
+        String(255), unique=True, index=True, nullable=False
     )
 
-    hashed_password: Mapped[str] = mapped_column(
-        String(255), 
-        nullable=False
-    )
+    hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=lambda: datetime.now(timezone.utc),
-        server_default=func.now()
+        server_default=func.now(),
     )
 
-    created_rooms: Mapped[list["Room"]] = relationship(
-        back_populates="created_by"
+    owned_rooms: Mapped[list["Room"]] = relationship(
+        back_populates="owner", cascade="all, delete-orphan"
     )
+
+    def __repr__(self):
+        return f"<User id={self.id} username={self.username!r}>"
+
+
+from app.models.room import Room  # noqa: E402
