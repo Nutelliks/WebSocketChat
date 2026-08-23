@@ -62,7 +62,7 @@ async def login(
         raise invalid_credentials
 
     access_token = create_access_token(subject=user.id)
-    return Token(token=access_token, token_type="bearer")
+    return Token(access_token=access_token, token_type="bearer")
 
 
 @router.get("/me", response_model=UserRead)

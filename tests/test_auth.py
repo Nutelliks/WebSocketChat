@@ -46,7 +46,7 @@ class TestRegister:
         first = _make_payload()
         http.post(f"{api_url}/auth/register", json=first)
 
-        second = _make_payload(username=first["email"])
+        second = _make_payload(email=first["email"])
         response = http.post(f"{api_url}/auth/register", json=second)
 
         assert response.status_code == 409

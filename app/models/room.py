@@ -40,9 +40,7 @@ class Room(Base):
         server_default=func.now(),
     )
 
-    owner: Mapped["User"] = relationship(
-        back_populates="owned_rooms", cascade="all, delete-orphan"
-    )
+    owner: Mapped["User"] = relationship(back_populates="owned_rooms")
 
     def __repr__(self):
         return f"<Room id={self.id} name={self.name!r} is_private={self.is_private}>"
