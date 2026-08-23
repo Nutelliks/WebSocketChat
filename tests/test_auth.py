@@ -138,3 +138,30 @@ class TestLogin:
         )
 
         assert response.status_code == 401
+
+
+class TestMe:
+    def test_me_with_valid_token(
+        self,
+        http: requests.Session,
+        api_url: str,
+        registered_user: dict[str, str],
+        auth_token: str,
+    ) -> None:
+        response = http.get(
+            f"{api_url}/auth/me", headers={"Authorization": f"Bearer {auth_token}"}
+        )
+
+        assert response.status_code == 200, response.text
+        body = response.json()
+        assert body["username"] == registered_user["username"]
+
+    def test_me_without_token(self, http: requests.Session, api_url: str) -> None:
+        response = http.get(f"{api_url}/auth/me")
+
+        assert response.status_code == 401
+
+    def test_me_without_token(self, http: requests.Session, api_url: str) -> None:
+        response = http.get(f"{api_url}/auth/me", headers={"Authorization": "Bearer garbage.token.value"})
+
+        assert response.status_code == 401
