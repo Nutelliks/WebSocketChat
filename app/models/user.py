@@ -35,8 +35,13 @@ class User(Base):
         back_populates="owner", cascade="all, delete-orphan"
     )
 
+    room_memberships: Mapped[list["RoomMember"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
+    )
+
     def __repr__(self):
         return f"<User id={self.id} username={self.username!r}>"
 
 
 from app.models.room import Room  # noqa: E402
+from app.models.room_member import RoomMember  # noqa: E402
